@@ -11,7 +11,7 @@
 #include <set>
 
 // Maximum amount of messages that can be held on a message terminal or bus. 
-#define MAX_MESSAGES 30
+#define MAX_MESSAGES 10
 
 // Message
 // Desc: Sent between terminals and the bus.
@@ -58,14 +58,16 @@ public:
 // Terminals: List of terminals the messages can be posted to.
 class MessageBus {
 
-	std::vector<class MessageTerminal *> terminals;
+	friend class MessageTerminal;
+
+	MessageArray messages;
+	std::set<class MessageTerminal *> terminals;
 
 public:
 
-	MessageArray messages;
-
 	void post();
 	void post(Message *);
+	void print() { messages.print(); }
 	void addTerminal(class MessageTerminal *);
 
 };
@@ -77,16 +79,18 @@ public:
 // Subscriptions: Message types that this terminal will recieve.
 class MessageTerminal {
 
+	friend class MessageBus;
+
 	class MessageBus * bus;
+	MessageArray messages;
 	std::set<std::string> subscriptions;
 
 public:
 
-	MessageArray messages;
-
 	MessageTerminal(MessageBus *);
 
 	void post(Message *);
+	void print() { messages.print(); }
 	void subscribe(std::string type);
 	void unsubscribe(std::string type);
 	bool isSubscribed(std::string type);

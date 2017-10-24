@@ -68,10 +68,11 @@ void MessageBus::post() {
 		if (message == nullptr)
 			return;
 
-		for (size_t i = 0; i < terminals.size(); i++) {
-			if (terminals[i]->isSubscribed(message->type) || terminals[i]->isSubscribed("All")) {
+		//for (size_t i = 0; i < terminals.size(); i++) {
+		for(std::set<MessageTerminal *>::iterator it = terminals.begin(); it != terminals.end(); it++) {
+			if ((*it)->isSubscribed(message->type) || (*it)->isSubscribed("All")) {
 				message->active++;
-				terminals[i]->messages.insert(message);
+				(*it)->messages.insert(message);
 				posted = true;
 			}
 		}
@@ -88,10 +89,10 @@ void MessageBus::post(Message * message) {
 
 	bool posted = false;
 
-	for (size_t i = 0; i < terminals.size(); i++) {
-		if (terminals[i]->isSubscribed(message->type) || terminals[i]->isSubscribed("All")) {
+	for (std::set<MessageTerminal *>::iterator it = terminals.begin(); it != terminals.end(); it++) {
+		if ((*it)->isSubscribed(message->type) || (*it)->isSubscribed("All")) {
 			message->active++;
-			terminals[i]->messages.insert(message);
+			(*it)->messages.insert(message);
 			posted = true;
 		}
 	}
@@ -104,7 +105,8 @@ void MessageBus::post(Message * message) {
 // Adds a terminal to the message bus for posting.
 void MessageBus::addTerminal(MessageTerminal * terminal) {
 
-	terminals.push_back(terminal);
+	if (!terminals.insert(terminal).second)
+		printf("ERROR: Trying to re-add terminal to bus\n");
 
 }
 
