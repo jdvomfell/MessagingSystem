@@ -125,6 +125,13 @@ void MessageTerminal::post(Message * message) {
 
 }
 
+// Retrieves the first message on the list.
+Message * MessageTerminal::getMessage() {
+
+	return messages.getMessage();
+
+}
+
 // Subscribes to the given message type.
 void MessageTerminal::subscribe(std::string type) {
 

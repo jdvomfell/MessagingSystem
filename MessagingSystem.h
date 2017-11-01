@@ -90,6 +90,7 @@ public:
 	MessageTerminal(MessageBus *);
 
 	void post(Message *);
+	Message * getMessage();
 	void print() { messages.print(); }
 	void subscribe(std::string type);
 	void unsubscribe(std::string type);
